@@ -1,4 +1,5 @@
 import discord
+from discord.ext import tasks
 from config import AppConfig
 
 
@@ -20,6 +21,8 @@ class RPiMotionDetectorBOT(discord.Client):
 
         print(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
 
+        self.printer.start()
+
     async def on_message(self, message):
         if message.author == self.user:
             return
@@ -27,7 +30,8 @@ class RPiMotionDetectorBOT(discord.Client):
         if message.content == 'ping':
             await message.channel.send('pong')
 
-    async def send_message(self, message):
+    @tasks.loop(seconds=2.0)
+    async def printer(self):
         target_channel = self.get_target_channel()
 
-        await target_channel.send(message)
+        await target_channel.send("Test")

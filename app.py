@@ -56,8 +56,8 @@ class App:
 
                 message = f"[{datetime.now()}] {detector.sector}"
 
-                if self.bot is not None:
-                    self.bot.send_message(message)
+                # if self.bot is not None:
+                #     self.bot.send_message(message)
 
                 print(message)
 
