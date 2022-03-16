@@ -1,4 +1,9 @@
+import os
+
+
 class AppConfig:
+    CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+
     CHECK_RATIO_TIME = 0.5
 
     DISCORD_BOT_TOKEN = ""
@@ -7,7 +12,9 @@ class AppConfig:
 
     BOT_COMMAND_PREFIX = "!"
 
-    LOG_FILE_PATH = "logs.txt"
+    LOG_FILES_DIR_PATH = os.path.join(CURRENT_DIR, "logs")
+
+    BOT_LOGS_FILE = "bot.txt"
 
 
 class DetectorsConfig:

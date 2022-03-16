@@ -19,7 +19,7 @@ class RPiMotionDetectorBOT(discord.Client):
         guild = self.get_guild()
         target_channel = self.get_target_channel()
 
-        log_utils.log_message(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
+        log_utils.log_bot(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
 
     async def on_message(self, message):
         if message.author != self.user:
