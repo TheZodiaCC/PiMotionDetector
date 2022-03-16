@@ -20,6 +20,6 @@ def log(message, log_file_name):
         file.write(f"[{datetime.now()}]{message}\n")
 
 
-def read_log_file():
-    with open(AppConfig.LOG_FILE_PATH, "r") as log_file:
+def read_log_file(file):
+    with open(os.path.join(AppConfig.LOG_FILES_DIR_PATH, file), "r") as log_file:
         return log_file.readlines()
