@@ -26,21 +26,34 @@ class RPiMotionDetectorBOT(discord.Client):
         if message.author != self.user and self.get_target_channel().name == AppConfig.DISCORD_TARGET_CHANNEL:
             if message.content[0] == AppConfig.BOT_COMMAND_PREFIX:
 
-                await message.channel.send(self.commands_handler(message))
+                output = self.commands_handler(message)
+
+                if output["type"] == "message":
+                    await message.channel.send(output["content"])
+
+                elif output["type"] == "file":
+                    await message.channel.send(file=discord.File(output["content"]))
 
     def commands_handler(self, command):
         command_content = command.content.replace("!", "")
 
-        output = "Not Found"
+        output = {
+            "type": "message",
+            "content": "Not Found"
+        }
 
         if command_content == "list":
-            output = self.list_command()
+            output["content"] = self.list_command()
 
         elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
-            output = self.get_command(command_content)
+            output["content"] = self.get_command(command_content)
 
         elif command_content == "help":
-            output = "list\nget\n"
+            output["content"] = "list\nget\ndownload\n"
+
+        elif command_content.split(" ")[0] == "download" and len(command_content.split(" ")) == 2:
+            output["type"] = "file"
+            output["content"] = self.download_command(command_content)
 
         return output
 
@@ -55,8 +68,20 @@ class RPiMotionDetectorBOT(discord.Client):
 
         if file in log_files:
             raw_output = log_utils.read_log_file(file)
-            raw_output= "_".join(raw_output).replace("\n", "").split("_")[-50:]
+            raw_output = "_".join(raw_output).replace("\n", "").split("_")[-20:]
 
             output = "\n".join(raw_output)
+
+        return output
+
+    def download_command(self, command):
+        output = ""
+
+        target_channel = self.get_target_channel()
+
+        download_file_name = command.split()[1]
+
+        if target_channel and download_file_name:
+            output = os.path.join(AppConfig.LOG_FILES_DIR_PATH, download_file_name)
 
         return output

@@ -5,6 +5,7 @@ from modules.bot import RPiMotionDetectorBOT
 from modules.motion_notifier import MotionDetectionNotifier
 import multiprocessing
 import time
+from datetime import datetime
 import log_utils
 
 
@@ -49,7 +50,7 @@ class App:
             if detector.check_detection():
                 log_utils.log_message(detector.sector)
 
-                self.notifier_webhook.send_message(detector.sector)
+                self.notifier_webhook.send_message(f"[{datetime.now()}] {detector.sector}")
 
     def start_mainloop(self):
         self.is_running = True
