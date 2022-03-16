@@ -26,3 +26,8 @@ class RPiMotionDetectorBOT(discord.Client):
 
         if message.content == 'ping':
             await message.channel.send('pong')
+
+    async def send_message(self, message):
+        target_channel = self.get_target_channel()
+
+        await target_channel.send(message)
