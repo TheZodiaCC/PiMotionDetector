@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 from config import DetectorsConfig, AppConfig
 from modules.motion_detector import MotionDetector
 from modules.bot import RPiMotionDetectorBOT
+from modules.motion_notifier import MotionDetectionNotifier
 import multiprocessing
 import time
 import log_utils
@@ -11,6 +12,8 @@ class App:
     def __init__(self):
         self.bot = None
         self.bot_process = None
+
+        self.notifier_webhook = MotionDetectionNotifier()
 
         self.detectors = []
 
@@ -45,6 +48,8 @@ class App:
         for detector in self.detectors:
             if detector.check_detection():
                 log_utils.log_message(detector.sector)
+
+                self.notifier_webhook.send_message(detector.sector)
 
     def start_mainloop(self):
         self.is_running = True

@@ -6,6 +6,8 @@ class AppConfig:
 
     CHECK_RATIO_TIME = 0.5
 
+    DISCORD_WEBHOOK_URL = ""
+
     DISCORD_BOT_TOKEN = ""
     DISCORD_TARGET_GUILD = ""
     DISCORD_TARGET_CHANNEL = ""
