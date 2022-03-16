@@ -1,6 +1,10 @@
 class AppConfig:
     CHECK_RATIO_TIME = 0.5
 
+    DISCORD_BOT_TOKEN = ""
+    DISCORD_TARGET_GUILD = ""
+    DISCORD_TARGET_CHANNEL = ""
+
 
 class DetectorsConfig:
     SECTOR_KEY_NAME = "sector"

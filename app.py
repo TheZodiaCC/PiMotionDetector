@@ -1,18 +1,34 @@
 import RPi.GPIO as GPIO
 from config import DetectorsConfig, AppConfig
 from modules.motion_detector import MotionDetector
+from modules.bot import RPiMotionDetectorBOT
+import multiprocessing
 import time
 from datetime import datetime
 
 
 class App:
     def __init__(self):
+        self.bot = None
+        self.bot_process = multiprocessing.Process(target=self.run_bot)
+
         self.detectors = []
 
         self.is_running = False
 
+        self.init()
+
+    def init(self):
         self.setup_gpio()
         self.init_detectors()
+        self.start_bot_process()
+
+    def start_bot_process(self):
+        self.bot_process.start()
+
+    def run_bot(self):
+        self.bot = RPiMotionDetectorBOT()
+        self.bot.run(AppConfig.DISCORD_BOT_TOKEN)
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BCM)
