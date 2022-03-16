@@ -2,10 +2,9 @@ import RPi.GPIO as GPIO
 from config import DetectorsConfig, AppConfig
 from modules.motion_detector import MotionDetector
 from modules.bot import RPiMotionDetectorBOT
-import threading
+import multiprocessing
 import time
-from datetime import datetime
-import asyncio
+import log_utils
 
 
 class App:
@@ -25,20 +24,12 @@ class App:
         self.start_bot_process()
 
     def start_bot_process(self):
-        asyncio.get_child_watcher()
-
-        bot_loop = asyncio.get_event_loop()
-        bot_loop.create_task(self.run_bot())
-
-        self.bot_process = threading.Thread(target=self.run_bot_loop, args=(bot_loop,))
+        self.bot_process = multiprocessing.Process(target=self.run_bot)
         self.bot_process.start()
 
-    async def run_bot(self):
+    def run_bot(self):
         self.bot = RPiMotionDetectorBOT()
-        await self.bot.start(AppConfig.DISCORD_BOT_TOKEN)
-
-    def run_bot_loop(self, bot_loop):
-        bot_loop.run_forever()
+        self.bot.run(AppConfig.DISCORD_BOT_TOKEN)
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BCM)
@@ -53,13 +44,7 @@ class App:
     def check_detectors(self):
         for detector in self.detectors:
             if detector.check_detection():
-
-                message = f"[{datetime.now()}] {detector.sector}"
-
-                # if self.bot is not None:
-                #     self.bot.send_message(message)
-
-                print(message)
+                log_utils.log_message(detector.sector)
 
     def start_mainloop(self):
         self.is_running = True

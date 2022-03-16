@@ -5,6 +5,10 @@ class AppConfig:
     DISCORD_TARGET_GUILD = ""
     DISCORD_TARGET_CHANNEL = ""
 
+    BOT_COMMAND_PREFIX = "!"
+
+    LOG_FILE_PATH = "logs.txt"
+
 
 class DetectorsConfig:
     SECTOR_KEY_NAME = "sector"

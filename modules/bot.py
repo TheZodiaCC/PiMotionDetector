@@ -1,6 +1,6 @@
 import discord
-from discord.ext import tasks
 from config import AppConfig
+import log_utils
 
 
 class RPiMotionDetectorBOT(discord.Client):
@@ -19,19 +19,13 @@ class RPiMotionDetectorBOT(discord.Client):
         guild = self.get_guild()
         target_channel = self.get_target_channel()
 
-        print(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
-
-        self.printer.start()
+        log_utils.log_message(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
 
     async def on_message(self, message):
-        if message.author == self.user:
-            return
+        if message.author != self.user:
 
-        if message.content == 'ping':
-            await message.channel.send('pong')
+            if message.content[0] == AppConfig.BOT_COMMAND_PREFIX:
+                message_content = message.content.replace("!", "")
 
-    @tasks.loop(seconds=2.0)
-    async def printer(self):
-        target_channel = self.get_target_channel()
-
-        await target_channel.send("Test")
+                if message_content:
+                    await message.channel.send(message_content)
