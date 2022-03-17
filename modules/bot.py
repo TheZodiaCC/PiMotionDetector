@@ -42,20 +42,28 @@ class RPiMotionDetectorBOT(discord.Client):
             BotConfig.MESSAGE_CONTENT_KEY_NAME: "Not Found"
         }
 
-        if command_content == "list":
-            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.list_command()
+        try:
+            if command_content == "list":
+                output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.list_command()
 
-        # elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
-        #     output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.get_command(command_content)
+            # elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
+            #     output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.get_command(command_content)
 
-        elif command_content == "help":
-            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = "list\ndownload\n"
+            elif command_content == "help":
+                output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = "list\ndownload\n"
 
-        elif command_content.split(" ")[0] == "download" and len(command_content.split(" ")) == 2:
-            output[BotConfig.MESSAGE_TYPE_KEY_NAME] = BotConfig.FILE_TYPE_MESSAGE_KEY_NAME
-            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.download_command(command_content)
+            elif command_content.split(" ")[0] == "download" and len(command_content.split(" ")) == 2:
+                download_content = self.download_command(command_content)
 
-        return output
+                if download_content:
+                    output[BotConfig.MESSAGE_TYPE_KEY_NAME] = BotConfig.FILE_TYPE_MESSAGE_KEY_NAME
+                    output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = download_content
+
+        except Exception as e:
+            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = "Error while performing command"
+
+        finally:
+            return output
 
     def list_command(self):
         return "\n".join(os.listdir(AppConfig.LOG_FILES_DIR_PATH))
@@ -82,6 +90,7 @@ class RPiMotionDetectorBOT(discord.Client):
         download_file_name = command.split()[1]
 
         if target_channel and download_file_name:
-            output = os.path.join(AppConfig.LOG_FILES_DIR_PATH, download_file_name)
+            if download_file_name in os.listdir(AppConfig.LOG_FILES_DIR_PATH):
+                output = os.path.join(AppConfig.LOG_FILES_DIR_PATH, download_file_name)
 
         return output
