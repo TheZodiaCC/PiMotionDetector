@@ -45,11 +45,11 @@ class RPiMotionDetectorBOT(discord.Client):
         if command_content == "list":
             output["content"] = self.list_command()
 
-        elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
-            output["content"] = self.get_command(command_content)
+        # elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
+        #     output["content"] = self.get_command(command_content)
 
         elif command_content == "help":
-            output["content"] = "list\nget\ndownload\n"
+            output["content"] = "list\ndownload\n"
 
         elif command_content.split(" ")[0] == "download" and len(command_content.split(" ")) == 2:
             output["type"] = "file"
@@ -58,21 +58,21 @@ class RPiMotionDetectorBOT(discord.Client):
         return output
 
     def list_command(self):
-        return " ".join(os.listdir(AppConfig.LOG_FILES_DIR_PATH))
+        return "\n".join(os.listdir(AppConfig.LOG_FILES_DIR_PATH))
 
-    def get_command(self, command):
-        output = ""
+    # def get_command(self, command):
+    #     output = ""
 
-        file = command.split(" ")[1]
-        log_files = os.listdir(AppConfig.LOG_FILES_DIR_PATH)
+    #     file = command.split(" ")[1]
+    #     log_files = os.listdir(AppConfig.LOG_FILES_DIR_PATH)
 
-        if file in log_files:
-            raw_output = log_utils.read_log_file(file)
-            raw_output = "_".join(raw_output).replace("\n", "").split("_")[-20:]
+    #     if file in log_files:
+    #         raw_output = log_utils.read_log_file(file)
+    #         raw_output = "_".join(raw_output).replace("\n", "").split("_")[-20:]
 
-            output = "\n".join(raw_output)
+    #         output = "\n".join(raw_output)
 
-        return output
+    #     return output
 
     def download_command(self, command):
         output = ""
