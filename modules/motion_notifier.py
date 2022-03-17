@@ -1,10 +1,10 @@
 from discord import Webhook, RequestsWebhookAdapter
-from config import AppConfig
+from config import DiscordConfig
 
 
 class MotionDetectionNotifier:
     def __init__(self):
-        self.webhook = Webhook.from_url(AppConfig.DISCORD_WEBHOOK_URL,
+        self.webhook = Webhook.from_url(DiscordConfig.DISCORD_WEBHOOK_URL,
                                         adapter=RequestsWebhookAdapter())
 
     def send_message(self, message):
