@@ -21,6 +21,14 @@ class DiscordConfig:
     DISCORD_TARGET_CHANNEL = ""
 
 
+class BotConfig:
+    MESSAGE_TYPE_KEY_NAME = "type"
+    MESSAGE_CONTENT_KEY_NAME = "content"
+
+    MESSAGE_TYPE_MESSAGE_KEY_NAME = "message"
+    FILE_TYPE_MESSAGE_KEY_NAME = "file"
+
+
 class DetectorsConfig:
     SECTOR_KEY_NAME = "sector"
     PIN_KEY_NAME = "pin"

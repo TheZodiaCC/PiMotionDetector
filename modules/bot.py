@@ -1,5 +1,5 @@
 import discord
-from config import AppConfig, DiscordConfig
+from config import AppConfig, DiscordConfig, BotConfig
 import log_utils
 import os
 
@@ -28,32 +28,32 @@ class RPiMotionDetectorBOT(discord.Client):
 
                 output = self.commands_handler(message)
 
-                if output["type"] == "message":
-                    await message.channel.send(output["content"])
+                if output[BotConfig.MESSAGE_TYPE_KEY_NAME] == BotConfig.MESSAGE_TYPE_MESSAGE_KEY_NAME:
+                    await message.channel.send(output[BotConfig.MESSAGE_CONTENT_KEY_NAME])
 
-                elif output["type"] == "file":
-                    await message.channel.send(file=discord.File(output["content"]))
+                elif output[BotConfig.MESSAGE_TYPE_KEY_NAME] == BotConfig.FILE_TYPE_MESSAGE_KEY_NAME:
+                    await message.channel.send(file=discord.File(output[BotConfig.MESSAGE_CONTENT_KEY_NAME]))
 
     def commands_handler(self, command):
         command_content = command.content.replace("!", "")
 
         output = {
-            "type": "message",
-            "content": "Not Found"
+            BotConfig.MESSAGE_TYPE_KEY_NAME: BotConfig.MESSAGE_TYPE_MESSAGE_KEY_NAME,
+            BotConfig.MESSAGE_CONTENT_KEY_NAME: "Not Found"
         }
 
         if command_content == "list":
-            output["content"] = self.list_command()
+            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.list_command()
 
         # elif command_content.split(" ")[0] == "get" and len(command_content.split(" ")) == 2:
-        #     output["content"] = self.get_command(command_content)
+        #     output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.get_command(command_content)
 
         elif command_content == "help":
-            output["content"] = "list\ndownload\n"
+            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = "list\ndownload\n"
 
         elif command_content.split(" ")[0] == "download" and len(command_content.split(" ")) == 2:
-            output["type"] = "file"
-            output["content"] = self.download_command(command_content)
+            output[BotConfig.MESSAGE_TYPE_KEY_NAME] = BotConfig.FILE_TYPE_MESSAGE_KEY_NAME
+            output[BotConfig.MESSAGE_CONTENT_KEY_NAME] = self.download_command(command_content)
 
         return output
 
