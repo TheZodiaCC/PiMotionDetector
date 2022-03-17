@@ -14,7 +14,7 @@ class App:
         self.bot = None
         self.bot_process = None
 
-        self.notifier_webhook = MotionDetectionNotifier()
+        self.notifier_webhook = None
 
         self.detectors = []
 
@@ -26,6 +26,7 @@ class App:
         self.setup_gpio()
         self.init_detectors()
         self.start_bot_process()
+        self.init_notifier()
 
     def start_bot_process(self):
         self.bot_process = multiprocessing.Process(target=self.run_bot)
@@ -34,6 +35,13 @@ class App:
     def run_bot(self):
         self.bot = RPiMotionDetectorBOT()
         self.bot.run(DiscordConfig.DISCORD_BOT_TOKEN)
+
+    def init_notifier(self):
+        try:
+            self.notifier_webhook = MotionDetectionNotifier()
+
+        except Exception as e:
+            log_utils.log_bot(f"Error while initializing notifier webhook {e}")
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BCM)
@@ -50,7 +58,8 @@ class App:
             if detector.check_detection():
                 log_utils.log_message(detector.sector)
 
-                self.notifier_webhook.send_message(f"[{datetime.now()}] {detector.sector}")
+                if self.notifier_webhook is not None:
+                    self.notifier_webhook.send_message(f"[{datetime.now()}] {detector.sector}")
 
     def start_mainloop(self):
         self.is_running = True
