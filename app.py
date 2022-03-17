@@ -33,8 +33,12 @@ class App:
         self.bot_process.start()
 
     def run_bot(self):
-        self.bot = RPiMotionDetectorBOT()
-        self.bot.run(DiscordConfig.DISCORD_BOT_TOKEN)
+        try:
+            self.bot = RPiMotionDetectorBOT()
+            self.bot.run(DiscordConfig.DISCORD_BOT_TOKEN)
+
+        except Exception as e:
+            log_utils.log_bot(f"Error while initializing bot {e}")
 
     def init_notifier(self):
         try:
