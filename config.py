@@ -6,17 +6,19 @@ class AppConfig:
 
     CHECK_RATIO_TIME = 0.5
 
+    LOG_FILES_DIR_PATH = os.path.join(CURRENT_DIR, "logs")
+
+    BOT_LOGS_FILE = "bot.txt"
+
+
+class DiscordConfig:
+    BOT_COMMAND_PREFIX = "!"
+
     DISCORD_WEBHOOK_URL = ""
 
     DISCORD_BOT_TOKEN = ""
     DISCORD_TARGET_GUILD = ""
     DISCORD_TARGET_CHANNEL = ""
-
-    BOT_COMMAND_PREFIX = "!"
-
-    LOG_FILES_DIR_PATH = os.path.join(CURRENT_DIR, "logs")
-
-    BOT_LOGS_FILE = "bot.txt"
 
 
 class DetectorsConfig:

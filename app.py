@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from config import DetectorsConfig, AppConfig
+from config import DetectorsConfig, AppConfig, DiscordConfig
 from modules.motion_detector import MotionDetector
 from modules.bot import RPiMotionDetectorBOT
 from modules.motion_notifier import MotionDetectionNotifier
@@ -33,7 +33,7 @@ class App:
 
     def run_bot(self):
         self.bot = RPiMotionDetectorBOT()
-        self.bot.run(AppConfig.DISCORD_BOT_TOKEN)
+        self.bot.run(DiscordConfig.DISCORD_BOT_TOKEN)
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BCM)
@@ -41,7 +41,7 @@ class App:
     def init_detectors(self):
         for detector_config in DetectorsConfig.DETECTORS:
             detector = MotionDetector(detector_config[DetectorsConfig.PIN_KEY_NAME],
-                                       detector_config[DetectorsConfig.SECTOR_KEY_NAME])
+                                      detector_config[DetectorsConfig.SECTOR_KEY_NAME])
 
             self.detectors.append(detector)
 

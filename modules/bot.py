@@ -1,5 +1,5 @@
 import discord
-from config import AppConfig
+from config import AppConfig, DiscordConfig
 import log_utils
 import os
 
@@ -9,12 +9,12 @@ class RPiMotionDetectorBOT(discord.Client):
         super().__init__()
 
     def get_guild(self):
-        return discord.utils.get(self.guilds, name=AppConfig.DISCORD_TARGET_GUILD)
+        return discord.utils.get(self.guilds, name=DiscordConfig.DISCORD_TARGET_GUILD)
 
     def get_target_channel(self):
         guild = self.get_guild()
 
-        return discord.utils.get(guild.channels, name=AppConfig.DISCORD_TARGET_CHANNEL)
+        return discord.utils.get(guild.channels, name=DiscordConfig.DISCORD_TARGET_CHANNEL)
 
     async def on_ready(self):
         guild = self.get_guild()
@@ -23,8 +23,8 @@ class RPiMotionDetectorBOT(discord.Client):
         log_utils.log_bot(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
 
     async def on_message(self, message):
-        if message.author != self.user and self.get_target_channel().name == AppConfig.DISCORD_TARGET_CHANNEL:
-            if message.content[0] == AppConfig.BOT_COMMAND_PREFIX:
+        if message.author != self.user and self.get_target_channel().name == DiscordConfig.DISCORD_TARGET_CHANNEL:
+            if message.content[0] == DiscordConfig.BOT_COMMAND_PREFIX:
 
                 output = self.commands_handler(message)
 
