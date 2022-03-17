@@ -23,16 +23,18 @@ class RPiMotionDetectorBOT(discord.Client):
         log_utils.log_bot(f"Logged on as {self.user}, Guild: {guild}, Target Channel: {target_channel}")
 
     async def on_message(self, message):
-        if message.author != self.user and self.get_target_channel().name == DiscordConfig.DISCORD_TARGET_CHANNEL:
+        target_channel = self.get_target_channel()
+
+        if message.author != self.user and message.channel.name == target_channel.name:
             if message.content[0] == DiscordConfig.BOT_COMMAND_PREFIX:
 
                 output = self.commands_handler(message)
 
                 if output[BotConfig.MESSAGE_TYPE_KEY_NAME] == BotConfig.MESSAGE_TYPE_MESSAGE_KEY_NAME:
-                    await message.channel.send(output[BotConfig.MESSAGE_CONTENT_KEY_NAME])
+                    await target_channel.send(output[BotConfig.MESSAGE_CONTENT_KEY_NAME])
 
                 elif output[BotConfig.MESSAGE_TYPE_KEY_NAME] == BotConfig.FILE_TYPE_MESSAGE_KEY_NAME:
-                    await message.channel.send(file=discord.File(output[BotConfig.MESSAGE_CONTENT_KEY_NAME]))
+                    await target_channel.send(file=discord.File(output[BotConfig.MESSAGE_CONTENT_KEY_NAME]))
 
     def commands_handler(self, command):
         command_content = command.content.replace("!", "")
