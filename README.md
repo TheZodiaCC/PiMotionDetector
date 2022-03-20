@@ -31,3 +31,8 @@ Accessing GPIO from docker container can sometimes not work as expected (especia
 2. `pip3 install -r requirements.txt`
 3. `source motion_det_venv/bin/activate`
 4. `nohup python3 main.py &`
+
+---
+
+### Media
+![device](media/device.jpg)
