@@ -1,6 +1,6 @@
 ### PiMotionDetector
 
-Raspberry Pi powered motion detector with discord bot integration
+Raspberry Pi powered motion detector (PIR HC-SR501) with discord bot integration
 
 ---
 
@@ -23,3 +23,11 @@ Raspberry Pi powered motion detector with discord bot integration
    ```
    sudo docker update --restart unless-stopped pimotiondetector
    ```
+   
+---
+
+Accessing GPIO from docker container can sometimes not work as expected (especially on RPi Zero ARMV5) in this case use:
+1. `python3 -m venv motion_det_venv`
+2. `pip3 install -r requirements.txt`
+3. `source motion_det_venv/bin/activate`
+4. `nohup python3 main.py &`
